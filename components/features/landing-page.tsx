@@ -486,60 +486,13 @@ export function LandingPage() {
           </motion.div>
           <div className="relative h-[340px] w-full overflow-hidden rounded-xl">
             <Image
-              src={galleryImages[8].src}
-              alt={galleryImages[8].alt}
+              src="/photos/finished-wine-rack.webp"
+              alt="Finished custom wine rack and storage wall"
               fill
               sizes="(max-width: 768px) 100vw, 50vw"
               className="object-cover"
               loading="lazy"
             />
-          </div>
-        </section>
-
-        <section className="bg-[#f8f9fa] py-16">
-          <div className="mx-auto w-full max-w-7xl px-4 md:px-8">
-            <h2 className="text-center font-serif-display text-3xl text-[var(--color-brand-navy)]">
-              Luxury Remodeling Tailored to Your Vision
-            </h2>
-            <div className="mt-10 grid gap-6 md:grid-cols-3">
-              {[
-                {
-                  title: "Custom Kitchens",
-                  description:
-                    "From chef-inspired layouts to custom cabinetry, we build kitchens that serve as the breathtaking heart of your home.",
-                  image: galleryImages[4], // kitchen-white-wood-island
-                },
-                {
-                  title: "Spa-Like Bathrooms",
-                  description:
-                    "Turn your daily routine into a private retreat with custom vanities, soaking tubs, and premium fixtures.",
-                  image: galleryImages[9], // bathroom-freestanding-tub
-                },
-                {
-                  title: "Finished Basements",
-                  description:
-                    "Expand your living space with a beautifully finished lower level perfect for entertaining guests or family time.",
-                  image: galleryImages[0], // basement-pool-table-hero
-                },
-              ].map((service) => (
-                <article key={service.title} className="rounded-xl bg-white p-4 shadow-sm">
-                  <div className="relative h-56 w-full overflow-hidden rounded-xl">
-                    <Image
-                      src={service.image.src}
-                      alt={service.image.alt}
-                      fill
-                      sizes="(max-width: 768px) 100vw, 33vw"
-                      className="object-cover"
-                      loading="lazy"
-                    />
-                  </div>
-                  <h3 className="mt-4 font-serif-display text-2xl text-[var(--color-brand-navy)]">
-                    {service.title}
-                  </h3>
-                  <p className="mt-2 text-slate-700">{service.description}</p>
-                </article>
-              ))}
-            </div>
           </div>
         </section>
 
@@ -661,7 +614,7 @@ export function LandingPage() {
           </div>
         </section>
 
-        <section className="relative overflow-hidden py-20">
+        <section className="relative overflow-hidden py-28">
           <div className="absolute inset-0">
             <PlaceholderPhoto
               label="Final CTA Interior or Exterior"

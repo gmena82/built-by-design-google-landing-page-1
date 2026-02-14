@@ -5,99 +5,20 @@ export interface GalleryImage {
 }
 
 export const galleryImages: GalleryImage[] = [
-  // Basement Remodels
-  {
-    src: '/gallery/basement-pool-table-hero.webp',
-    alt: 'Modern basement remodel with pool table, light gray walls, and open concept kitchen area',
-    category: 'basement',
-  },
-  {
-    src: '/gallery/basement-pool-table-entertainment.webp',
-    alt: 'Luxury basement entertainment space featuring pool table and dark blue custom cabinets',
-    category: 'basement',
-  },
-  {
-    src: '/gallery/basement-wine-room.webp',
-    alt: 'Custom wine room with glass enclosure, dark cabinetry, and elegant patterned wallpaper',
-    category: 'basement',
-  },
-  {
-    src: '/gallery/basement-gym-stairway.webp',
-    alt: 'Basement home gym with white stairway featuring designer patterned tile and modern railings',
-    category: 'basement',
-  },
-  
-  // Kitchen Remodels
-  {
-    src: '/gallery/kitchen-white-wood-island.webp',
-    alt: 'Bright white kitchen remodel with natural wood island, bar seating, and custom copper range hood',
-    category: 'kitchen',
-  },
-  {
-    src: '/gallery/kitchen-green-island.webp',
-    alt: 'Designer kitchen featuring sage green island with white perimeter cabinets and patterned backsplash',
-    category: 'kitchen',
-  },
-  {
-    src: '/gallery/kitchen-white-galley.webp',
-    alt: 'Elegant white galley kitchen with dark quartz countertops and rich hardwood flooring',
-    category: 'kitchen',
-  },
-  {
-    src: '/gallery/kitchen-dining-warm-tones.webp',
-    alt: 'Open concept kitchen and dining area with warm wood tones and modern finishes',
-    category: 'kitchen',
-  },
-  {
-    src: '/gallery/kitchen-wooden-cabinets-detail.webp',
-    alt: 'Modern kitchen detail shot featuring custom wooden upper cabinets, pendant lights, and built-in TV',
-    category: 'kitchen',
-  },
-  
-  // Bathroom Remodels
-  {
-    src: '/gallery/bathroom-freestanding-tub.webp',
-    alt: 'Spa-inspired bathroom remodel with freestanding soaking tub, frameless glass shower, and black-framed windows',
-    category: 'bathroom',
-  },
-  {
-    src: '/gallery/bathroom-marble-vanity.webp',
-    alt: 'Luxury bathroom with double vanity, marble accent wall, and matte black fixtures',
-    category: 'bathroom',
-  },
-  {
-    src: '/gallery/bathroom-blue-vanity.webp',
-    alt: 'Contemporary bathroom featuring navy blue vanity with white countertops and gold hardware accents',
-    category: 'bathroom',
-  },
-  {
-    src: '/gallery/bathroom-white-modern.webp',
-    alt: 'Clean modern bathroom remodel with white fixtures, premium tile work, and spa-like ambiance',
-    category: 'bathroom',
-  },
-  
-  // Outdoor/Whole-Home
-  {
-    src: '/gallery/whole-home-outdoor-patio.webp',
-    alt: 'Modern outdoor living space with custom pergola and contemporary patio design',
-    category: 'outdoor',
-  },
-  {
-    src: '/gallery/home-addition-outdoor-deck.webp',
-    alt: 'Luxury home addition featuring expansive outdoor deck with comfortable seating area',
-    category: 'outdoor',
-  },
+  { src: '/gallery/basement-pool-table-hero.webp', alt: 'Finished basement with pool table and open entertainment area', category: 'basement' },
+  { src: '/gallery/blue-basement.webp', alt: 'Basement remodel with blue cabinetry and entertainment layout', category: 'basement' },
+  { src: '/gallery/kitchen-white-wood-island.webp', alt: 'White kitchen with wood island and bar seating', category: 'kitchen' },
+  { src: '/gallery/kitchen-white-green.webp', alt: 'Kitchen remodel with white cabinetry and green island', category: 'kitchen' },
+  { src: '/gallery/kitchen-brown-island.webp', alt: 'Kitchen remodel featuring a warm brown island and bright finishes', category: 'kitchen' },
+  { src: '/gallery/kitchen-wooden-cabinets-detail.webp', alt: 'Kitchen detail with wooden cabinets and modern lighting', category: 'kitchen' },
+  { src: '/gallery/bathroom-white-modern.webp', alt: 'Modern white bathroom remodel with clean lines', category: 'bathroom' },
+  { src: '/gallery/bathroom-blue-vanity.webp', alt: 'Bathroom remodel with blue vanity and white counters', category: 'bathroom' },
+  { src: '/gallery/bathroom-shower-tub.webp', alt: 'Bathroom with glass shower and freestanding tub', category: 'bathroom' },
+  { src: '/gallery/whole-home-outdoor-patio.webp', alt: 'Whole-home project with modern outdoor patio', category: 'outdoor' },
+  { src: '/gallery/home-addition-outdoor-deck.webp', alt: 'Home addition with outdoor deck and seating area', category: 'outdoor' },
+  { src: '/gallery/outdoor-seating.webp', alt: 'Outdoor living space with covered seating area', category: 'outdoor' },
 ];
 
-// Featured images for "Browse Our Recent Transformations" section (all unique)
-export const featuredGalleryImages = [
-  galleryImages[4],  // kitchen-white-wood-island
-  galleryImages[9],  // bathroom-freestanding-tub
-  galleryImages[0],  // basement-pool-table-hero
-  galleryImages[5],  // kitchen-green-island
-  galleryImages[10], // bathroom-marble-vanity
-  galleryImages[2],  // basement-wine-room
-  galleryImages[7],  // kitchen-dining-warm-tones
-  galleryImages[11], // bathroom-blue-vanity
-  galleryImages[3],  // basement-gym-stairway
-];
+// Featured images for "Browse Our Recent Transformations" section.
+// Keep this tied to current gallery ordering so UI updates automatically.
+export const featuredGalleryImages = galleryImages.slice(0, 6);
