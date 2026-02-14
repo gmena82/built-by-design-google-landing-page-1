@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { motion } from "motion/react";
 import {
-  Check,
+  CircleCheck,
   Coffee,
   Hammer,
   MapPin,
@@ -113,6 +113,12 @@ const processSteps = [
       "Step into your newly remodeled, flawlessly finished space.",
     icon: Sparkles,
   },
+];
+
+const heroTrustBadges = [
+  { label: "5-Star Houzz Rated", icon: Star },
+  { label: "REMY Award Winners", icon: Trophy },
+  { label: "Fully Licensed and Insured", icon: ShieldCheck },
 ];
 
 function PlaceholderPhoto({
@@ -295,15 +301,26 @@ export function LandingPage() {
                 and unmatched daily communication.
               </p>
               <div className="flex flex-wrap items-center gap-3 text-sm font-semibold text-white">
-                <span className="rounded-full border border-white/30 px-3 py-1">
-                  Logo Here - 5-Star Houzz Rated
-                </span>
-                <span className="rounded-full border border-white/30 px-3 py-1">
-                  Logo Here - REMY Award Winners
-                </span>
-                <span className="rounded-full border border-white/30 px-3 py-1">
-                  Logo Here - Fully Licensed and Insured
-                </span>
+                {heroTrustBadges.map((badge) => (
+                  <span
+                    key={badge.label}
+                    className="inline-flex items-center gap-2 rounded-full border border-white/30 px-3 py-1"
+                  >
+                    <motion.span
+                      className="inline-flex text-[var(--color-brand-gold-light)]"
+                      animate={{ scale: [1, 1.14, 1] }}
+                      transition={{
+                        duration: 0.8,
+                        repeat: Infinity,
+                        repeatDelay: 3.2,
+                        ease: "easeInOut",
+                      }}
+                    >
+                      <badge.icon className="h-4 w-4" />
+                    </motion.span>
+                    {badge.label}
+                  </span>
+                ))}
               </div>
             </motion.div>
 
@@ -437,21 +454,39 @@ export function LandingPage() {
             </p>
             <ul className="space-y-2 text-slate-700">
               <li className="flex gap-2">
-                <Check className="mt-1 h-4 w-4 shrink-0 text-[var(--color-brand-gold-dark)]" />
+                <motion.span
+                  className="mt-1 inline-flex shrink-0 text-[var(--color-brand-gold-mid)]"
+                  animate={{ scale: [1, 1.08, 1], opacity: [0.85, 1, 0.85] }}
+                  transition={{ duration: 0.9, repeat: Infinity, repeatDelay: 2.1, ease: "easeInOut" }}
+                >
+                  <CircleCheck className="h-4 w-4" />
+                </motion.span>
                 <span>
                   <strong>Constant Communication:</strong> You will never be left in the dark.
                   We prioritize daily updates.
                 </span>
               </li>
               <li className="flex gap-2">
-                <Check className="mt-1 h-4 w-4 shrink-0 text-[var(--color-brand-gold-dark)]" />
+                <motion.span
+                  className="mt-1 inline-flex shrink-0 text-[var(--color-brand-gold-mid)]"
+                  animate={{ scale: [1, 1.08, 1], opacity: [0.85, 1, 0.85] }}
+                  transition={{ duration: 0.9, repeat: Infinity, repeatDelay: 2.1, ease: "easeInOut" }}
+                >
+                  <CircleCheck className="h-4 w-4" />
+                </motion.span>
                 <span>
                   <strong>Flawless Craftsmanship:</strong> Decades of experience bringing
                   high-end visions to life.
                 </span>
               </li>
               <li className="flex gap-2">
-                <Check className="mt-1 h-4 w-4 shrink-0 text-[var(--color-brand-gold-dark)]" />
+                <motion.span
+                  className="mt-1 inline-flex shrink-0 text-[var(--color-brand-gold-mid)]"
+                  animate={{ scale: [1, 1.08, 1], opacity: [0.85, 1, 0.85] }}
+                  transition={{ duration: 0.9, repeat: Infinity, repeatDelay: 2.1, ease: "easeInOut" }}
+                >
+                  <CircleCheck className="h-4 w-4" />
+                </motion.span>
                 <span>
                   <strong>Transparent Pricing:</strong> Detailed scopes of work tailored to
                   respect your exact budget.
@@ -481,7 +516,7 @@ export function LandingPage() {
                   description:
                     "Turn your daily routine into a private retreat with custom vanities, soaking tubs, and premium fixtures.",
                   photo: "Luxury Bath with Walk-In Shower",
-                  src: "/photos/2.webp",
+                  src: "/photos/bathroom.webp",
                 },
                 {
                   title: "Finished Basements",
