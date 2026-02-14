@@ -22,6 +22,7 @@ import {
   submitLeadForm,
   type LeadActionState,
 } from "@/app/actions/lead-form";
+import { galleryImages, featuredGalleryImages } from "@/lib/gallery-data";
 
 const initialLeadState: LeadActionState = {
   success: false,
@@ -36,21 +37,7 @@ const PHOTOS = {
   logoWhite: "/photos/bbd-white-logo.png",
 };
 
-const galleryItems = [
-  { label: "Kitchen Renovation - Wide Shot", src: "/photos/1.webp" },
-  { label: "Bathroom Remodel - Tile Detail", src: "/photos/2.webp" },
-  { label: "Basement Buildout - Entertainment Zone", src: "/photos/3.webp" },
-  { label: "Custom Cabinetry - Hardware Detail", src: "/photos/1.webp" },
-  { label: "Luxury Shower - Glass and Stone", src: "/photos/2.webp" },
-  { label: "Kitchen Island - Pendant Lighting", src: "/photos/3.webp" },
-  { label: "Basement Wet Bar - Finished Trim", src: "/photos/1.webp" },
-  { label: "Freestanding Tub - Spa Feature", src: "/photos/2.webp" },
-];
-
-const extraLightboxItems = Array.from({ length: 20 }, (_, index) => {
-  const src = PHOTOS.gallery[index % 3];
-  return { label: `Portfolio Image ${index + 1}`, src };
-});
+// Gallery items are now imported from gallery-data.ts
 
 const testimonialCards = [
   {
@@ -230,7 +217,7 @@ export function LandingPage() {
   }, [leadState, reset]);
 
   const lightboxImages = useMemo(
-    () => [...galleryItems, ...extraLightboxItems],
+    () => galleryImages,
     [],
   );
 
@@ -552,10 +539,17 @@ export function LandingPage() {
             <h2 className="text-center font-serif-display text-3xl text-white">
               Browse Our Recent Transformations
             </h2>
-            <div className="mt-10 columns-1 gap-4 space-y-4 md:columns-2 lg:columns-4">
-              {galleryItems.map((item) => (
-                <div key={item.label} className="break-inside-avoid">
-                  <PlaceholderPhoto label={item.label} src={item.src} className="h-48 w-full" />
+            <div className="mt-10 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+              {featuredGalleryImages.map((item, idx) => (
+                <div key={idx} className="relative h-64 w-full overflow-hidden rounded-xl">
+                  <Image
+                    src={item.src}
+                    alt={item.alt}
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    className="object-cover"
+                    loading="lazy"
+                  />
                 </div>
               ))}
             </div>
@@ -732,11 +726,16 @@ export function LandingPage() {
                 Close
               </button>
             </div>
-            <PlaceholderPhoto
-              label={lightboxImages[lightboxIndex]?.label ?? "Photo"}
-              src={lightboxImages[lightboxIndex]?.src}
-              className="h-[55vh] w-full"
-            />
+            <div className="relative h-[55vh] w-full overflow-hidden rounded-xl">
+              <Image
+                src={lightboxImages[lightboxIndex]?.src}
+                alt={lightboxImages[lightboxIndex]?.alt ?? "Gallery image"}
+                fill
+                sizes="(max-width: 1024px) 100vw, 896px"
+                className="object-contain"
+                loading="lazy"
+              />
+            </div>
             <div className="mt-4 flex justify-between">
               <button
                 type="button"
