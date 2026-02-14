@@ -125,10 +125,12 @@ function PlaceholderPhoto({
   label,
   className,
   src,
+  fit = "cover",
 }: {
   label: string;
   className?: string;
   src?: string;
+  fit?: "cover" | "contain";
 }) {
   const imageSrc = src ?? "/placeholder-photo.svg";
   const showLabel = !src;
@@ -142,7 +144,8 @@ function PlaceholderPhoto({
         alt={label}
         fill
         sizes="(max-width: 768px) 100vw, 50vw"
-        className="object-cover opacity-90"
+        className="opacity-90"
+        style={{ objectFit: fit, objectPosition: "center" }}
       />
       {!src && <div className="absolute inset-0 bg-slate-900/25" />}
       {showLabel && (
@@ -348,7 +351,7 @@ export function LandingPage() {
                     {...register("fullName")}
                     name="fullName"
                     placeholder="First and Last Name"
-                    className="w-full rounded-md border border-slate-300 px-4 py-3 text-sm outline-none ring-[var(--color-brand-gold-dark)] transition focus:ring-2"
+                    className="w-full rounded-md border border-slate-300 bg-white px-4 py-3 text-sm outline-none ring-[var(--color-brand-gold-dark)] transition focus:ring-2"
                   />
                   {errors.fullName ? (
                     <p className="mt-1 text-xs text-red-600">{errors.fullName.message}</p>
@@ -360,7 +363,7 @@ export function LandingPage() {
                     name="email"
                     type="email"
                     placeholder="Email"
-                    className="w-full rounded-md border border-slate-300 px-4 py-3 text-sm outline-none ring-[var(--color-brand-gold-dark)] transition focus:ring-2"
+                    className="w-full rounded-md border border-slate-300 bg-white px-4 py-3 text-sm outline-none ring-[var(--color-brand-gold-dark)] transition focus:ring-2"
                   />
                   {errors.email ? (
                     <p className="mt-1 text-xs text-red-600">{errors.email.message}</p>
@@ -372,7 +375,7 @@ export function LandingPage() {
                     name="phone"
                     type="tel"
                     placeholder="Phone Number"
-                    className="w-full rounded-md border border-slate-300 px-4 py-3 text-sm outline-none ring-[var(--color-brand-gold-dark)] transition focus:ring-2"
+                    className="w-full rounded-md border border-slate-300 bg-white px-4 py-3 text-sm outline-none ring-[var(--color-brand-gold-dark)] transition focus:ring-2"
                   />
                   {errors.phone ? (
                     <p className="mt-1 text-xs text-red-600">{errors.phone.message}</p>
@@ -403,7 +406,7 @@ export function LandingPage() {
                     name="zipCode"
                     inputMode="numeric"
                     placeholder="Zip Code"
-                    className="w-full rounded-md border border-slate-300 px-4 py-3 text-sm outline-none ring-[var(--color-brand-gold-dark)] transition focus:ring-2"
+                    className="w-full rounded-md border border-slate-300 bg-white px-4 py-3 text-sm outline-none ring-[var(--color-brand-gold-dark)] transition focus:ring-2"
                   />
                   {errors.zipCode ? (
                     <p className="mt-1 text-xs text-red-600">{errors.zipCode.message}</p>
@@ -517,6 +520,7 @@ export function LandingPage() {
                     "Turn your daily routine into a private retreat with custom vanities, soaking tubs, and premium fixtures.",
                   photo: "Luxury Bath with Walk-In Shower",
                   src: "/photos/bathroom.webp",
+                  fit: "contain" as const,
                 },
                 {
                   title: "Finished Basements",
@@ -527,7 +531,12 @@ export function LandingPage() {
                 },
               ].map((service) => (
                 <article key={service.title} className="rounded-xl bg-white p-4 shadow-sm">
-                  <PlaceholderPhoto label={service.photo} src={service.src} className="h-56 w-full" />
+                  <PlaceholderPhoto
+                    label={service.photo}
+                    src={service.src}
+                    fit={service.fit}
+                    className="h-56 w-full bg-slate-50"
+                  />
                   <h3 className="mt-4 font-serif-display text-2xl text-[var(--color-brand-navy)]">
                     {service.title}
                   </h3>
