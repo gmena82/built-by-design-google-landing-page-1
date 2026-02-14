@@ -484,7 +484,16 @@ export function LandingPage() {
               </li>
             </ul>
           </motion.div>
-          <PlaceholderPhoto label="Team On Site with Client" src="/photos/1.webp" className="h-[340px] w-full" />
+          <div className="relative h-[340px] w-full overflow-hidden rounded-xl">
+            <Image
+              src={galleryImages[8].src}
+              alt={galleryImages[8].alt}
+              fill
+              sizes="(max-width: 768px) 100vw, 50vw"
+              className="object-cover"
+              loading="lazy"
+            />
+          </div>
         </section>
 
         <section className="bg-[#f8f9fa] py-16">
@@ -498,32 +507,32 @@ export function LandingPage() {
                   title: "Custom Kitchens",
                   description:
                     "From chef-inspired layouts to custom cabinetry, we build kitchens that serve as the breathtaking heart of your home.",
-                  photo: "Luxury Kitchen with Large Island",
-                  src: "/photos/1.webp",
+                  image: galleryImages[4], // kitchen-white-wood-island
                 },
                 {
                   title: "Spa-Like Bathrooms",
                   description:
                     "Turn your daily routine into a private retreat with custom vanities, soaking tubs, and premium fixtures.",
-                  photo: "Luxury Bath with Walk-In Shower",
-                  src: "/photos/bathroom.webp",
-                  fit: "contain" as const,
+                  image: galleryImages[9], // bathroom-freestanding-tub
                 },
                 {
                   title: "Finished Basements",
                   description:
                     "Expand your living space with a beautifully finished lower level perfect for entertaining guests or family time.",
-                  photo: "Basement with Wet Bar/Home Theater",
-                  src: "/photos/3.webp",
+                  image: galleryImages[0], // basement-pool-table-hero
                 },
               ].map((service) => (
                 <article key={service.title} className="rounded-xl bg-white p-4 shadow-sm">
-                  <PlaceholderPhoto
-                    label={service.photo}
-                    src={service.src}
-                    fit={service.fit}
-                    className="h-56 w-full bg-slate-50"
-                  />
+                  <div className="relative h-56 w-full overflow-hidden rounded-xl">
+                    <Image
+                      src={service.image.src}
+                      alt={service.image.alt}
+                      fill
+                      sizes="(max-width: 768px) 100vw, 33vw"
+                      className="object-cover"
+                      loading="lazy"
+                    />
+                  </div>
                   <h3 className="mt-4 font-serif-display text-2xl text-[var(--color-brand-navy)]">
                     {service.title}
                   </h3>

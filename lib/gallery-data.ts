@@ -89,12 +89,15 @@ export const galleryImages: GalleryImage[] = [
   },
 ];
 
-// Featured images for "Browse Our Recent Transformations" section
+// Featured images for "Browse Our Recent Transformations" section (all unique)
 export const featuredGalleryImages = [
-  galleryImages[4], // kitchen-white-wood-island
-  galleryImages[9], // bathroom-freestanding-tub
-  galleryImages[0], // basement-pool-table-hero
-  galleryImages[6], // kitchen-white-galley
+  galleryImages[4],  // kitchen-white-wood-island
+  galleryImages[9],  // bathroom-freestanding-tub
+  galleryImages[0],  // basement-pool-table-hero
+  galleryImages[5],  // kitchen-green-island
+  galleryImages[10], // bathroom-marble-vanity
+  galleryImages[2],  // basement-wine-room
+  galleryImages[7],  // kitchen-dining-warm-tones
   galleryImages[11], // bathroom-blue-vanity
-  galleryImages[1], // basement-pool-table-entertainment
+  galleryImages[3],  // basement-gym-stairway
 ];
