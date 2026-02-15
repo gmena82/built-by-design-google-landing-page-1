@@ -652,7 +652,7 @@ export function LandingPage() {
             />
           </div>
           <p>
-            318 N. Overlook Street, Olathe, KS 66061 |{" "}
+            9393 W 110th St Suite 500, Overland Park, KS 66210 |{" "}
             <a href="tel:+19137826311" className="text-[var(--color-brand-gold-dark)]">
               (913) 782-6311
             </a>
