@@ -180,6 +180,7 @@ function FormSubmitButton() {
 }
 
 export function LandingPage() {
+  const currentYear = new Date().getFullYear();
   const router = useRouter();
   const [leadState, formAction] = useActionState(submitLeadForm, initialLeadState);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
@@ -805,7 +806,9 @@ export function LandingPage() {
           </div>
 
           <div className="border-t border-white/10 py-4">
-            <p className="text-xs text-slate-500">� 2026 Built By Design KC. All Rights Reserved.</p>
+            <p className="text-xs text-slate-500">
+              {"\u00A9"} {currentYear} Built By Design KC. All Rights Reserved.
+            </p>
           </div>
         </div>
       </footer>

@@ -39,15 +39,48 @@ export default function RootLayout({
               window.dataLayer = window.dataLayer || [];
               function gtag(){dataLayer.push(arguments);}
               window.gtag = window.gtag || gtag;
-              gtag('consent', 'default', {
-                ad_storage: 'denied',
-                analytics_storage: 'denied',
-                ad_user_data: 'denied',
-                ad_personalization: 'denied',
-                functionality_storage: 'denied',
-                personalization_storage: 'denied',
-                security_storage: 'granted'
-              });
+              (function () {
+                var deniedDefaults = {
+                  ad_storage: 'denied',
+                  analytics_storage: 'denied',
+                  ad_user_data: 'denied',
+                  ad_personalization: 'denied',
+                  functionality_storage: 'denied',
+                  personalization_storage: 'denied',
+                  security_storage: 'granted'
+                };
+                var mergedConsent = Object.assign({}, deniedDefaults);
+
+                try {
+                  var raw = window.localStorage.getItem('bbd_cookie_consent_v1');
+                  if (raw) {
+                    var parsed = JSON.parse(raw);
+                    if (parsed && typeof parsed === 'object') {
+                      var consentKeys = [
+                        'ad_storage',
+                        'analytics_storage',
+                        'ad_user_data',
+                        'ad_personalization',
+                        'functionality_storage',
+                        'personalization_storage'
+                      ];
+
+                      for (var i = 0; i < consentKeys.length; i++) {
+                        var key = consentKeys[i];
+                        var value = parsed[key];
+                        if (value === 'granted' || value === 'denied') {
+                          mergedConsent[key] = value;
+                        }
+                      }
+                    }
+                  }
+                } catch (e) {
+                  // Ignore storage/parse failures and keep denied defaults.
+                }
+
+                mergedConsent.security_storage = 'granted';
+                gtag('consent', 'default', mergedConsent);
+              })();
             `,
           }}
         />

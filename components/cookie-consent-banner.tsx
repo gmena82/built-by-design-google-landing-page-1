@@ -49,7 +49,32 @@ function pushConsentUpdate(consent: ConsentState) {
 }
 
 function saveConsent(consent: ConsentState) {
-  localStorage.setItem(CONSENT_STORAGE_KEY, JSON.stringify(consent));
+  try {
+    localStorage.setItem(CONSENT_STORAGE_KEY, JSON.stringify(consent));
+  } catch {
+    // Ignore storage write failures (e.g. private mode restrictions).
+  }
+}
+
+function normalizeStoredConsent(parsed: unknown): ConsentState | null {
+  if (!parsed || typeof parsed !== "object") {
+    return null;
+  }
+
+  const source = parsed as Partial<Record<keyof ConsentState, string>>;
+  const normalized: ConsentState = {
+    ad_storage: source.ad_storage === "granted" ? "granted" : "denied",
+    analytics_storage: source.analytics_storage === "granted" ? "granted" : "denied",
+    ad_user_data: source.ad_user_data === "granted" ? "granted" : "denied",
+    ad_personalization: source.ad_personalization === "granted" ? "granted" : "denied",
+    functionality_storage:
+      source.functionality_storage === "granted" ? "granted" : "denied",
+    personalization_storage:
+      source.personalization_storage === "granted" ? "granted" : "denied",
+    security_storage: "granted",
+  };
+
+  return normalized;
 }
 
 export function CookieConsentBanner() {
@@ -61,7 +86,15 @@ export function CookieConsentBanner() {
   const [allowFunctional, setAllowFunctional] = useState(false);
 
   useEffect(() => {
-    const existing = localStorage.getItem(CONSENT_STORAGE_KEY);
+    let existing: string | null = null;
+    try {
+      existing = localStorage.getItem(CONSENT_STORAGE_KEY);
+    } catch {
+      setIsVisible(true);
+      setIsReady(true);
+      return;
+    }
+
     if (!existing) {
       setIsVisible(true);
       setIsReady(true);
@@ -69,16 +102,26 @@ export function CookieConsentBanner() {
     }
 
     try {
-      const parsed = JSON.parse(existing) as Partial<ConsentState>;
-      setAllowAnalytics(parsed.analytics_storage === "granted");
+      const parsed = JSON.parse(existing);
+      const normalized = normalizeStoredConsent(parsed);
+      if (!normalized) {
+        setIsVisible(true);
+        setIsReady(true);
+        return;
+      }
+
+      // Re-apply persisted consent to guarantee current-session enforcement.
+      pushConsentUpdate(normalized);
+
+      setAllowAnalytics(normalized.analytics_storage === "granted");
       setAllowAds(
-        parsed.ad_storage === "granted" &&
-          parsed.ad_user_data === "granted" &&
-          parsed.ad_personalization === "granted",
+        normalized.ad_storage === "granted" &&
+          normalized.ad_user_data === "granted" &&
+          normalized.ad_personalization === "granted",
       );
       setAllowFunctional(
-        parsed.functionality_storage === "granted" &&
-          parsed.personalization_storage === "granted",
+        normalized.functionality_storage === "granted" &&
+          normalized.personalization_storage === "granted",
       );
     } catch {
       setIsVisible(true);
