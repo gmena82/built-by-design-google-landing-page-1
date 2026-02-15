@@ -152,7 +152,7 @@ export default function TermsOfServicePage() {
             Governing Law
           </h2>
           <p className="text-slate-700">
-            These Terms are governed by the laws of Missouri, USA, without regard to conflict of
+            These Terms are governed by the laws of Kansas, USA, without regard to conflict of
             law principles.
           </p>
         </section>

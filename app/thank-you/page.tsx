@@ -21,9 +21,24 @@ export default function ThankYouPage() {
               sessionStorage.setItem("bbd_conversion_fired", "1");
 
               window.dataLayer = window.dataLayer || [];
+              var readAttribution = function (key) {
+                try {
+                  return localStorage.getItem("bbd_attribution_" + key) || "";
+                } catch (_e) {
+                  return "";
+                }
+              };
               window.dataLayer.push({
                 event: "lead_submitted",
                 lead_type: "google_ads_landing_form",
+                gclid: readAttribution("gclid"),
+                wbraid: readAttribution("wbraid"),
+                gbraid: readAttribution("gbraid"),
+                utm_source: readAttribution("utm_source"),
+                utm_medium: readAttribution("utm_medium"),
+                utm_campaign: readAttribution("utm_campaign"),
+                utm_term: readAttribution("utm_term"),
+                utm_content: readAttribution("utm_content"),
                 page_path: window.location.pathname,
                 page_location: window.location.href
               });
