@@ -82,9 +82,32 @@ public/
 2. Validation runs via `zodResolver(leadFormSchema)` on submit.
 3. Data is posted to `submitLeadForm` server action.
 4. Server action validates again with the same Zod schema.
-5. Success/error message is shown via `sonner` toast.
+5. On success, users are redirected to `/thank-you` for conversion tracking.
+6. Errors are shown via `sonner` toast.
 
-Current behavior: form submission returns a success message only (no external CRM/email integration yet).
+Attribution fields captured and sent with each lead:
+- `gclid`, `wbraid`, `gbraid`
+- `utm_source`, `utm_medium`, `utm_campaign`, `utm_term`, `utm_content`
+- `landingPageUrl`
+
+Conversion event support on `/thank-you`:
+- Pushes `dataLayer` event: `lead_submitted`
+
+Call conversion support on click-to-call:
+- Pushes `dataLayer` event: `click_to_call` for header/footer phone taps
+
+Tracking foundation:
+- Optional GTM loader (recommended), enabled only when `NEXT_PUBLIC_GTM_ID` is set
+- If `NEXT_PUBLIC_GTM_ID` is blank, page still works and emits no GTM script errors
+- DataLayer events are still pushed and will be usable once GTM is connected
+
+Spam controls:
+- Honeypot field (`website`) with server-side trap
+- Simple IP-based rate limiting in server action (in-memory, 5 submissions / 10 minutes / IP)
+
+Formspree endpoint check:
+- Endpoint currently responds to network preflight (`OPTIONS 200`) at `https://formspree.io/f/mykdwgle`
+- Live delivery confirmation still requires an end-to-end submission test to your inbox/target destination
 
 ## Content and Asset Updates
 

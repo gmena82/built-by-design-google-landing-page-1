@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useActionState, useEffect, useMemo, useRef, useState } from "react";
 import { useFormStatus } from "react-dom";
 import { useForm } from "react-hook-form";
@@ -10,7 +11,9 @@ import {
   CircleCheck,
   Coffee,
   Hammer,
+  Mail,
   MapPin,
+  Phone,
   ShieldCheck,
   Sparkles,
   Star,
@@ -108,6 +111,24 @@ const heroTrustBadges = [
   { label: "Fully Licensed and Insured", icon: ShieldCheck },
 ];
 
+const ATTRIBUTION_KEYS = [
+  "gclid",
+  "wbraid",
+  "gbraid",
+  "utm_source",
+  "utm_medium",
+  "utm_campaign",
+  "utm_term",
+  "utm_content",
+] as const;
+
+declare global {
+  interface Window {
+    dataLayer: unknown[];
+    gtag?: (...args: unknown[]) => void;
+  }
+}
+
 function PlaceholderPhoto({
   label,
   className,
@@ -159,6 +180,7 @@ function FormSubmitButton() {
 }
 
 export function LandingPage() {
+  const router = useRouter();
   const [leadState, formAction] = useActionState(submitLeadForm, initialLeadState);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
@@ -196,12 +218,34 @@ export function LandingPage() {
   const {
     register,
     trigger,
+    setValue,
     formState: { errors },
-    reset,
   } = useForm<LeadFormValues>({
     resolver: zodResolver(leadFormSchema),
     mode: "onSubmit",
   });
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+
+    for (const key of ATTRIBUTION_KEYS) {
+      const storageKey = `bbd_attribution_${key}`;
+      const incoming = params.get(key);
+      const stored = localStorage.getItem(storageKey);
+      const value = incoming ?? stored ?? "";
+
+      if (incoming) {
+        localStorage.setItem(storageKey, incoming);
+      }
+
+      setValue(key, value, { shouldDirty: false, shouldTouch: false });
+    }
+
+    setValue("landingPageUrl", window.location.href, {
+      shouldDirty: false,
+      shouldTouch: false,
+    });
+  }, [setValue]);
 
   useEffect(() => {
     if (!leadState.message) {
@@ -209,12 +253,11 @@ export function LandingPage() {
     }
 
     if (leadState.success) {
-      toast.success(leadState.message);
-      reset();
+      router.push("/thank-you");
     } else {
       toast.error(leadState.message);
     }
-  }, [leadState, reset]);
+  }, [leadState, router]);
 
   const lightboxImages = useMemo(
     () => galleryImages,
@@ -226,6 +269,20 @@ export function LandingPage() {
     if (target) {
       target.scrollIntoView({ behavior: "smooth", block: "start" });
     }
+  };
+
+  const trackCallClick = (placement: "header-mobile" | "header-desktop" | "footer") => {
+    if (typeof window === "undefined") return;
+
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+      event: "click_to_call",
+      call_placement: placement,
+      method: "phone",
+      phone_number: "(913) 782-6311",
+      page_path: window.location.pathname,
+      page_location: window.location.href,
+    });
   };
 
   return (
@@ -245,15 +302,29 @@ export function LandingPage() {
             />
           </div>
           <div className="flex items-center gap-4">
+            <a
+              href="tel:+19137826311"
+              onClick={() => trackCallClick("header-mobile")}
+              className="rounded-md border border-slate-300 px-3 py-2 text-sm font-bold text-[var(--color-brand-navy)] md:hidden"
+            >
+              Call (913) 782-6311
+            </a>
             <div className="hidden text-right md:block">
               <p className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">
                 Call to Speak with a Designer
               </p>
               <a
                 href="tel:+19137826311"
+                onClick={() => trackCallClick("header-desktop")}
                 className="text-lg font-bold text-[var(--color-brand-navy)]"
               >
                 (913) 782-6311
+              </a>
+              <a
+                href="mailto:builtbydesign@builtbydesignkc.com"
+                className="block text-sm font-medium text-[var(--color-brand-navy)] hover:underline"
+              >
+                builtbydesign@builtbydesignkc.com
               </a>
             </div>
             <button
@@ -289,6 +360,9 @@ export function LandingPage() {
               <p className="max-w-xl text-lg text-slate-100">
                 We transform Johnson County homes with stunning designs, expert craftsmanship,
                 and unmatched daily communication.
+              </p>
+              <p className="text-sm font-semibold tracking-[0.08em] text-[var(--color-brand-gold-light)]">
+                Featured in 435 Magazine, The Kansas City Star, &amp; Country Living
               </p>
               <div className="flex flex-wrap items-center gap-3 text-sm font-semibold text-white">
                 {heroTrustBadges.map((badge) => (
@@ -398,6 +472,26 @@ export function LandingPage() {
                   {errors.zipCode ? (
                     <p className="mt-1 text-xs text-red-600">{errors.zipCode.message}</p>
                   ) : null}
+                </div>
+                <input type="hidden" {...register("gclid")} name="gclid" />
+                <input type="hidden" {...register("wbraid")} name="wbraid" />
+                <input type="hidden" {...register("gbraid")} name="gbraid" />
+                <input type="hidden" {...register("utm_source")} name="utm_source" />
+                <input type="hidden" {...register("utm_medium")} name="utm_medium" />
+                <input type="hidden" {...register("utm_campaign")} name="utm_campaign" />
+                <input type="hidden" {...register("utm_term")} name="utm_term" />
+                <input type="hidden" {...register("utm_content")} name="utm_content" />
+                <input type="hidden" {...register("landingPageUrl")} name="landingPageUrl" />
+                <div className="hidden" aria-hidden="true">
+                  <label htmlFor="website">Website</label>
+                  <input
+                    id="website"
+                    type="text"
+                    tabIndex={-1}
+                    autoComplete="off"
+                    {...register("website")}
+                    name="website"
+                  />
                 </div>
                 <FormSubmitButton />
               </div>
@@ -640,36 +734,79 @@ export function LandingPage() {
         </section>
       </main>
 
-      <footer className="bg-[#111111] py-10 text-slate-300">
-        <div className="mx-auto grid w-full max-w-7xl gap-5 px-4 md:px-8">
-          <div className="relative h-10 w-44">
-            <Image
-              src={PHOTOS.logoWhite}
-              alt="Built By Design KC"
-              fill
-              sizes="176px"
-              className="object-contain object-left"
-            />
+      <footer className="bg-[#111111] text-slate-300">
+        <div className="mx-auto w-full max-w-7xl px-4 md:px-8">
+          <div className="border-t border-white/10 py-12">
+            <div className="mb-8 flex justify-center md:justify-start">
+              <div className="relative h-10 w-44">
+                <Image
+                  src={PHOTOS.logoWhite}
+                  alt="Built By Design KC"
+                  fill
+                  sizes="176px"
+                  className="object-contain object-left"
+                />
+              </div>
+            </div>
+
+            <div className="grid gap-10 md:grid-cols-2">
+              <div className="space-y-4">
+                <div className="text-sm leading-relaxed text-slate-300">
+                  <p>9393 W 110th St Suite 500</p>
+                  <p>Overland Park</p>
+                  <p>KS 66210</p>
+                </div>
+
+                <a
+                  href="tel:+19137826311"
+                  onClick={() => trackCallClick("footer")}
+                  className="inline-flex items-center gap-2 text-sm font-semibold text-[var(--color-brand-gold-light)] transition hover:text-white"
+                >
+                  <Phone className="h-4 w-4" />
+                  (913) 782-6311
+                </a>
+              </div>
+
+              <div className="space-y-4 md:justify-self-end md:text-right">
+                <p className="text-sm text-slate-300">
+                  <span className="block">Proudly serving the Greater Kansas City Area</span>
+                  <span className="block">Lenexa, Leawood</span>
+                  <span className="block">Overland Park, and Olathe.</span>
+                </p>
+
+                <a
+                  href="mailto:builtbydesign@builtbydesignkc.com"
+                  className="inline-flex items-center gap-2 text-sm font-semibold text-[var(--color-brand-gold-light)] transition hover:text-white md:justify-end"
+                >
+                  <Mail className="h-4 w-4" />
+                  builtbydesign@builtbydesignkc.com
+                </a>
+              </div>
+            </div>
+
+            <div className="mt-8 flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-slate-400">
+              <a href="/privacy-policy" className="transition hover:text-[var(--color-brand-gold-light)]">
+                Privacy Policy
+              </a>
+              <a href="/terms-of-service" className="transition hover:text-[var(--color-brand-gold-light)]">
+                Terms of Service
+              </a>
+              <a href="/cookie-policy" className="transition hover:text-[var(--color-brand-gold-light)]">
+                Cookie Policy
+              </a>
+              <button
+                type="button"
+                onClick={() => window.dispatchEvent(new Event("open-cookie-consent"))}
+                className="cursor-pointer transition hover:text-[var(--color-brand-gold-light)]"
+              >
+                Cookie Settings
+              </button>
+            </div>
           </div>
-          <p>
-            9393 W 110th St Suite 500, Overland Park, KS 66210 |{" "}
-            <a href="tel:+19137826311" className="text-[var(--color-brand-gold-dark)]">
-              (913) 782-6311
-            </a>
-          </p>
-          <p>
-            Proudly serving the Greater Kansas City Area, Lenexa, Leawood, Overland Park, and
-            Olathe.
-          </p>
-          <div className="flex gap-4 text-sm">
-            <a href="#" className="hover:text-[var(--color-brand-gold-dark)]">
-              Privacy Policy
-            </a>
-            <a href="#" className="hover:text-[var(--color-brand-gold-dark)]">
-              Terms of Service
-            </a>
+
+          <div className="border-t border-white/10 py-4">
+            <p className="text-xs text-slate-500">� 2026 Built By Design KC. All Rights Reserved.</p>
           </div>
-          <p className="text-sm">© 2026 Built By Design KC. All Rights Reserved.</p>
         </div>
       </footer>
 
@@ -724,3 +861,4 @@ export function LandingPage() {
     </>
   );
 }
+
